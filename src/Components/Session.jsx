@@ -1,6 +1,18 @@
 import React from 'react';
+import { useEffect } from 'react';
 
-const Session = ({handleSubmit,handleChange,student,list,hobby,editId,handleDelete,handleEdit}) => {
+const Session = ({handleSubmit, updateRef,focusRef, setList,handleChange,student,list,hobby,editId,handleDelete,handleEdit}) => {
+
+   useEffect(()=>{
+        const sessionList = JSON.parse(sessionStorage.getItem("list")) || []
+        setList(sessionList)
+      },[])
+  
+      useEffect(()=>{
+        sessionStorage.setItem("list",JSON.stringify(list))
+      },[list])
+  
+
   return (
     <>
      <div className="container mt-5">
@@ -10,7 +22,7 @@ const Session = ({handleSubmit,handleChange,student,list,hobby,editId,handleDele
                     <h1 className='text-center fw-bold'>Students Details With Session Storage</h1>
                 <div className="mb-3 mt-4">
                     <label htmlFor="name" className="form-label">Name:</label>
-                    <input type="text" name='username' value={student.username || ''} onChange={handleChange} className="form-control" id="name" aria-describedby="emailHelp" />
+                    <input type="text" ref={focusRef} name='username' value={student.username || ''} onChange={handleChange} className="form-control" id="name" aria-describedby="emailHelp" />
                     
                 </div>
                 <div className="mb-3">
@@ -108,7 +120,7 @@ const Session = ({handleSubmit,handleChange,student,list,hobby,editId,handleDele
                 </select>
 
 
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" ref={updateRef} className="btn btn-primary">Submit</button>
                 </form>
 
             </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useRef} from 'react';
 import Navbar from './Components/Navbar';
 import Local from './Components/Local';
 import Session from './Components/Session';
@@ -12,26 +12,8 @@ const App = () => {
     const [list,setList] = useState([]);
     const [hobby,setHobby] = useState([]);
     const [editId,setEditId] = useState(null);
-
-
-    useEffect(()=>{
-      const saveList = JSON.parse(localStorage.getItem("list")) || []
-      setList(saveList)
-    },[])
-
-    useEffect(()=>{
-      localStorage.setItem("list",JSON.stringify(list));
-    },[list])
-
-
-    useEffect(()=>{
-      const sessionList = JSON.parse(sessionStorage.getItem("list")) || []
-      setList(sessionList)
-    },[])
-
-    useEffect(()=>{
-      sessionStorage.setItem("list",JSON.stringify(list))
-    },[list])
+    const updateRef = useRef();
+    const focusRef = useRef();
 
 
 
@@ -71,9 +53,14 @@ const App = () => {
         const updateList = list.map((item)=> item.id === editId ? student : item)
         setList(updateList)
         setEditId(null);
-       }
+        updateRef.current.classList.remove('btn-success');
+        updateRef.current.innerText = 'Submit';
+        updateRef.current.classList.add('btn-primary');
+        }
+       
        setStudents({})
        setHobby([])
+       focusRef.current.focus();
     }
 
      const handleDelete=(id)=>{
@@ -86,6 +73,10 @@ const App = () => {
       setStudents(editData)
       setEditId(id)
       setHobby(editData.hobby || [])
+       updateRef.current.classList.add('btn-success');
+        updateRef.current.innerText = 'Update';
+        updateRef.current.classList.remove('btn-primary');
+        focusRef.current.focus();
      }
 
   return (
@@ -104,6 +95,9 @@ const App = () => {
        editId={editId}
        handleDelete={handleDelete}
        handleEdit={handleEdit}
+       setList={setList}
+       updateRef={updateRef}
+       focusRef={focusRef}
       />}/>
       <Route path='/Session' element={<Session
       handleSubmit={handleSubmit}
@@ -114,6 +108,9 @@ const App = () => {
        editId={editId}
        handleDelete={handleDelete}
        handleEdit={handleEdit}
+       setList={setList}
+       updateRef={updateRef}
+       focusRef={focusRef}
 
       />}/>
      </Routes>

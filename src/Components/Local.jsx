@@ -1,6 +1,19 @@
 import React from 'react';
+import { useEffect } from 'react';
 
-const Local = ({handleSubmit,handleChange,student,list,hobby,editId,handleDelete,handleEdit}) => {
+const Local = ({handleSubmit,setList,updateRef,focusRef, handleChange,student,list,hobby,editId,handleDelete,handleEdit}) => {
+   
+  
+      useEffect(()=>{
+        const saveList = JSON.parse(localStorage.getItem("list")) || []
+        setList(saveList)
+      },[])
+  
+      useEffect(()=>{
+        localStorage.setItem("list",JSON.stringify(list));
+      },[list])
+  
+
   return (
     <>
       <div className="container mt-5">
@@ -10,7 +23,7 @@ const Local = ({handleSubmit,handleChange,student,list,hobby,editId,handleDelete
                     <h1 className='text-center fw-bold'>Students Details With Local Storage</h1>
                 <div className="mb-3 mt-4">
                     <label htmlFor="name" className="form-label">Name:</label>
-                    <input type="text" name='username' value={student.username || ''} onChange={handleChange} className="form-control" id="name" aria-describedby="emailHelp" />
+                    <input type="text" ref={focusRef} name='username' value={student.username || ''} onChange={handleChange} className="form-control" id="name" aria-describedby="emailHelp" />
                     
                 </div>
                 <div className="mb-3">
@@ -108,7 +121,7 @@ const Local = ({handleSubmit,handleChange,student,list,hobby,editId,handleDelete
                 </select>
 
 
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" ref={updateRef} className="btn btn-primary">Submit</button>
                 </form>
 
             </div>
